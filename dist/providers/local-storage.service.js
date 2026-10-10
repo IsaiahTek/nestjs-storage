@@ -18,7 +18,7 @@ let LocalStorageService = class LocalStorageService {
     constructor(config, options) {
         this.config = config;
         this.uploadDir = options?.local?.path ?? this.config.get('LOCAL_STORAGE_PATH', path.join(process.cwd(), 'uploads'));
-        this.publicUrl = options?.local?.url ?? this.config.get('LOCAL_STORAGE_URL', 'http://localhost:3000/uploads');
+        this.publicUrl = `/${path.basename(this.uploadDir)}`;
     }
     async upload(options) {
         const filePath = path.join(this.uploadDir, options.key);

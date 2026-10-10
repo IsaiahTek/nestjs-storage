@@ -68,7 +68,6 @@ Set the appropriate environment variables in your `.env` file based on the stora
 
 **Local Storage**
 - `LOCAL_STORAGE_PATH`: The local directory path where files should be stored (defaults to `uploads` folder in your working directory).
-- `LOCAL_STORAGE_URL`: The base URL to access the locally stored files (defaults to `http://localhost:3000/uploads`).
 
 ## Usage
 

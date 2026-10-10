@@ -24,10 +24,7 @@ export class LocalStorageService implements StorageProvider {
       path.join(process.cwd(), 'uploads'),
     );
 
-    this.publicUrl = options?.local?.url ?? this.config.get<string>(
-      'LOCAL_STORAGE_URL',
-      'http://localhost:3000/uploads',
-    );
+    this.publicUrl = `/${path.basename(this.uploadDir)}`;
   }
 
   async upload(options: UploadOptions): Promise<UploadResult> {

@@ -21,6 +21,5 @@ export interface StorageModuleOptions {
     };
     local?: {
         path?: string;
-        url?: string;
     };
 }
