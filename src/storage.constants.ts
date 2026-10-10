@@ -1,0 +1,4 @@
+// storage.constants.ts
+
+export const STORAGE_PROVIDER = Symbol('STORAGE_PROVIDER');
+export const STORAGE_OPTIONS = Symbol('STORAGE_OPTIONS');
