@@ -8,10 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { AwsStorageService } from './providers/aws-storage.service';
 import { CloudflareR2Service } from './providers/cloudflare-r2.service';
 import { LocalStorageService } from './providers/local-storage.service';
-
-export interface StorageModuleOptions {
-    driver?: 'aws' | 'r2' | 'local' | 'DO_SPACES';
-}
+import { StorageModuleOptions } from './interfaces/storage-options.interface';
 
 @Module({
     providers: [
@@ -25,17 +22,17 @@ export interface StorageModuleOptions {
             useFactory: (config: ConfigService, options: StorageModuleOptions) => {
                 switch (options.driver || config.get('STORAGE_DRIVER')) {
                     case 'aws':
-                        return new AwsStorageService(config);
+                        return new AwsStorageService(config, options);
 
                     case 'r2':
-                        return new CloudflareR2Service(config);
+                        return new CloudflareR2Service(config, options);
 
                     case 'local':
-                        return new LocalStorageService(config);
+                        return new LocalStorageService(config, options);
 
                     case 'DO_SPACES':
                     default:
-                        return new DigitalOceanStorageService(config);
+                        return new DigitalOceanStorageService(config, options);
                 }
             },
         },

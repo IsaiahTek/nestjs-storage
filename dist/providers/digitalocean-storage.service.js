@@ -14,13 +14,13 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const abstract_s3_storage_service_1 = require("./abstract-s3-storage.service");
 let DigitalOceanStorageService = class DigitalOceanStorageService extends abstract_s3_storage_service_1.AbstractS3StorageService {
-    constructor(config) {
+    constructor(config, options) {
         super(config, {
-            bucket: config.getOrThrow('DO_SPACES_BUCKET'),
-            region: config.getOrThrow('DO_SPACES_REGION'),
-            endpoint: config.getOrThrow('DO_SPACES_ENDPOINT'),
-            accessKey: config.getOrThrow('DO_SPACES_KEY'),
-            secretKey: config.getOrThrow('DO_SPACES_SECRET'),
+            bucket: options?.doSpaces?.bucket ?? config.getOrThrow('DO_SPACES_BUCKET'),
+            region: options?.doSpaces?.region ?? config.getOrThrow('DO_SPACES_REGION'),
+            endpoint: options?.doSpaces?.endpoint ?? config.getOrThrow('DO_SPACES_ENDPOINT'),
+            accessKey: options?.doSpaces?.accessKeyId ?? config.getOrThrow('DO_SPACES_KEY'),
+            secretKey: options?.doSpaces?.secretAccessKey ?? config.getOrThrow('DO_SPACES_SECRET'),
         });
     }
     getPublicUrl(key) {
@@ -30,6 +30,6 @@ let DigitalOceanStorageService = class DigitalOceanStorageService extends abstra
 exports.DigitalOceanStorageService = DigitalOceanStorageService;
 exports.DigitalOceanStorageService = DigitalOceanStorageService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [config_1.ConfigService])
+    __metadata("design:paramtypes", [config_1.ConfigService, Object])
 ], DigitalOceanStorageService);
 //# sourceMappingURL=digitalocean-storage.service.js.map

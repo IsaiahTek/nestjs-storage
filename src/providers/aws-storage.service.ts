@@ -4,19 +4,20 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { AbstractS3StorageService } from './abstract-s3-storage.service';
+import { StorageModuleOptions } from '../interfaces/storage-options.interface';
 
 @Injectable()
 export class AwsStorageService extends AbstractS3StorageService {
     private readonly region: string;
 
-    constructor(config: ConfigService) {
-        const region = config.getOrThrow<string>('AWS_REGION');
+    constructor(config: ConfigService, options?: StorageModuleOptions) {
+        const region = options?.aws?.region ?? config.getOrThrow<string>('AWS_REGION');
 
         super(config, {
-            bucket: config.getOrThrow('AWS_BUCKET'),
+            bucket: options?.aws?.bucket ?? config.getOrThrow('AWS_BUCKET'),
             region,
-            accessKey: config.getOrThrow('AWS_ACCESS_KEY_ID'),
-            secretKey: config.getOrThrow('AWS_SECRET_ACCESS_KEY'),
+            accessKey: options?.aws?.accessKeyId ?? config.getOrThrow('AWS_ACCESS_KEY_ID'),
+            secretKey: options?.aws?.secretAccessKey ?? config.getOrThrow('AWS_SECRET_ACCESS_KEY'),
         });
 
         this.region = region;

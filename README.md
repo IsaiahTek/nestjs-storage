@@ -23,9 +23,17 @@ import { StorageModule } from '@vynelix/nestjs-storage';
   imports: [
     ConfigModule.forRoot(),
     // Configure driver programmatically
-    StorageModule.register({ driver: 'aws' }),
+    StorageModule.register({ 
+      driver: 'aws',
+      aws: {
+        region: 'us-east-1',
+        bucket: 'my-bucket',
+        accessKeyId: 'your-access-key',
+        secretAccessKey: 'your-secret-key'
+      }
+    }),
     
-    // OR rely on the STORAGE_DRIVER environment variable
+    // OR rely on the environment variables
     // StorageModule,
   ],
 })

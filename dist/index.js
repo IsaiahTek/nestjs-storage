@@ -22,4 +22,5 @@ __exportStar(require("./providers/cloudflare-r2.service"), exports);
 __exportStar(require("./providers/digitalocean-storage.service"), exports);
 __exportStar(require("./providers/local-storage.service"), exports);
 __exportStar(require("./storage.constants"), exports);
+__exportStar(require("./interfaces/storage-options.interface"), exports);
 //# sourceMappingURL=index.js.map

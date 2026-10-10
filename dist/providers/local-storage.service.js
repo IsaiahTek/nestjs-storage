@@ -15,10 +15,10 @@ const config_1 = require("@nestjs/config");
 const fs_1 = require("fs");
 const path = require("path");
 let LocalStorageService = class LocalStorageService {
-    constructor(config) {
+    constructor(config, options) {
         this.config = config;
-        this.uploadDir = this.config.get('LOCAL_STORAGE_PATH', path.join(process.cwd(), 'uploads'));
-        this.publicUrl = this.config.get('LOCAL_STORAGE_URL', 'http://localhost:3000/uploads');
+        this.uploadDir = options?.local?.path ?? this.config.get('LOCAL_STORAGE_PATH', path.join(process.cwd(), 'uploads'));
+        this.publicUrl = options?.local?.url ?? this.config.get('LOCAL_STORAGE_URL', 'http://localhost:3000/uploads');
     }
     async upload(options) {
         const filePath = path.join(this.uploadDir, options.key);
@@ -72,6 +72,6 @@ let LocalStorageService = class LocalStorageService {
 exports.LocalStorageService = LocalStorageService;
 exports.LocalStorageService = LocalStorageService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [config_1.ConfigService])
+    __metadata("design:paramtypes", [config_1.ConfigService, Object])
 ], LocalStorageService);
 //# sourceMappingURL=local-storage.service.js.map

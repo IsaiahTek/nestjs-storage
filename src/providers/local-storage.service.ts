@@ -11,19 +11,20 @@ import {
   UploadOptions,
   UploadResult,
 } from '../interfaces/storage-provider.interface';
+import { StorageModuleOptions } from '../interfaces/storage-options.interface';
 
 @Injectable()
 export class LocalStorageService implements StorageProvider {
   private readonly uploadDir: string;
   private readonly publicUrl: string;
 
-  constructor(private readonly config: ConfigService) {
-    this.uploadDir = this.config.get<string>(
+  constructor(private readonly config: ConfigService, options?: StorageModuleOptions) {
+    this.uploadDir = options?.local?.path ?? this.config.get<string>(
       'LOCAL_STORAGE_PATH',
       path.join(process.cwd(), 'uploads'),
     );
 
-    this.publicUrl = this.config.get<string>(
+    this.publicUrl = options?.local?.url ?? this.config.get<string>(
       'LOCAL_STORAGE_URL',
       'http://localhost:3000/uploads',
     );

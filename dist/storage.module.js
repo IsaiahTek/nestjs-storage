@@ -42,14 +42,14 @@ exports.StorageModule = StorageModule = StorageModule_1 = __decorate([
                 useFactory: (config, options) => {
                     switch (options.driver || config.get('STORAGE_DRIVER')) {
                         case 'aws':
-                            return new aws_storage_service_1.AwsStorageService(config);
+                            return new aws_storage_service_1.AwsStorageService(config, options);
                         case 'r2':
-                            return new cloudflare_r2_service_1.CloudflareR2Service(config);
+                            return new cloudflare_r2_service_1.CloudflareR2Service(config, options);
                         case 'local':
-                            return new local_storage_service_1.LocalStorageService(config);
+                            return new local_storage_service_1.LocalStorageService(config, options);
                         case 'DO_SPACES':
                         default:
-                            return new digitalocean_storage_service_1.DigitalOceanStorageService(config);
+                            return new digitalocean_storage_service_1.DigitalOceanStorageService(config, options);
                     }
                 },
             },

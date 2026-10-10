@@ -14,13 +14,13 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const abstract_s3_storage_service_1 = require("./abstract-s3-storage.service");
 let AwsStorageService = class AwsStorageService extends abstract_s3_storage_service_1.AbstractS3StorageService {
-    constructor(config) {
-        const region = config.getOrThrow('AWS_REGION');
+    constructor(config, options) {
+        const region = options?.aws?.region ?? config.getOrThrow('AWS_REGION');
         super(config, {
-            bucket: config.getOrThrow('AWS_BUCKET'),
+            bucket: options?.aws?.bucket ?? config.getOrThrow('AWS_BUCKET'),
             region,
-            accessKey: config.getOrThrow('AWS_ACCESS_KEY_ID'),
-            secretKey: config.getOrThrow('AWS_SECRET_ACCESS_KEY'),
+            accessKey: options?.aws?.accessKeyId ?? config.getOrThrow('AWS_ACCESS_KEY_ID'),
+            secretKey: options?.aws?.secretAccessKey ?? config.getOrThrow('AWS_SECRET_ACCESS_KEY'),
         });
         this.region = region;
     }
@@ -31,6 +31,6 @@ let AwsStorageService = class AwsStorageService extends abstract_s3_storage_serv
 exports.AwsStorageService = AwsStorageService;
 exports.AwsStorageService = AwsStorageService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [config_1.ConfigService])
+    __metadata("design:paramtypes", [config_1.ConfigService, Object])
 ], AwsStorageService);
 //# sourceMappingURL=aws-storage.service.js.map

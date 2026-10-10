@@ -1,7 +1,5 @@
 import { DynamicModule } from '@nestjs/common';
-export interface StorageModuleOptions {
-    driver?: 'aws' | 'r2' | 'local' | 'DO_SPACES';
-}
+import { StorageModuleOptions } from './interfaces/storage-options.interface';
 export declare class StorageModule {
     static register(options: StorageModuleOptions): DynamicModule;
 }

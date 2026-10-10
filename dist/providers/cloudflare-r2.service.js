@@ -14,14 +14,14 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const abstract_s3_storage_service_1 = require("./abstract-s3-storage.service");
 let CloudflareR2Service = class CloudflareR2Service extends abstract_s3_storage_service_1.AbstractS3StorageService {
-    constructor(config) {
-        const accountId = config.getOrThrow('R2_ACCOUNT_ID');
+    constructor(config, options) {
+        const accountId = options?.r2?.accountId ?? config.getOrThrow('R2_ACCOUNT_ID');
         super(config, {
-            bucket: config.getOrThrow('R2_BUCKET'),
+            bucket: options?.r2?.bucket ?? config.getOrThrow('R2_BUCKET'),
             region: 'auto',
             endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
-            accessKey: config.getOrThrow('R2_ACCESS_KEY_ID'),
-            secretKey: config.getOrThrow('R2_SECRET_ACCESS_KEY'),
+            accessKey: options?.r2?.accessKeyId ?? config.getOrThrow('R2_ACCESS_KEY_ID'),
+            secretKey: options?.r2?.secretAccessKey ?? config.getOrThrow('R2_SECRET_ACCESS_KEY'),
         });
         this.accountId = accountId;
     }
@@ -32,6 +32,6 @@ let CloudflareR2Service = class CloudflareR2Service extends abstract_s3_storage_
 exports.CloudflareR2Service = CloudflareR2Service;
 exports.CloudflareR2Service = CloudflareR2Service = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [config_1.ConfigService])
+    __metadata("design:paramtypes", [config_1.ConfigService, Object])
 ], CloudflareR2Service);
 //# sourceMappingURL=cloudflare-r2.service.js.map
