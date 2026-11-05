@@ -10,34 +10,88 @@ npm install @vynelix/nestjs-storage @nestjs/config
 
 ## Configuration
 
-Import the `StorageModule` into your root `AppModule`. It uses `@nestjs/config` internally to read the environment variables.
+Import the `StorageModule` into your root `AppModule`. It can be configured synchronously with `forRoot()` or asynchronously with `forRootAsync()`.
 
-You can configure the storage driver either by passing it to `.register()` or by setting the `STORAGE_DRIVER` environment variable.
+> **Note:** `StorageModule.register()` is deprecated in favor of `StorageModule.forRoot()`.
+
+### Synchronous Configuration (`forRoot`)
+
+Configure the storage driver programmatically at module import time:
 
 ```typescript
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { StorageModule } from '@vynelix/nestjs-storage';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    // Configure driver programmatically
-    StorageModule.register({ 
+    StorageModule.forRoot({
+      isGlobal: true, // Optional: makes the module globally available
       driver: 'aws',
       aws: {
         region: 'us-east-1',
         bucket: 'my-bucket',
         accessKeyId: 'your-access-key',
-        secretAccessKey: 'your-secret-key'
-      }
+        secretAccessKey: 'your-secret-key',
+      },
     }),
-    
-    // OR rely on the environment variables
-    // StorageModule,
   ],
 })
 export class AppModule {}
+```
+
+### Asynchronous Configuration (`forRootAsync`)
+
+Use `forRootAsync` to load options dynamically, such as injecting `ConfigService`:
+
+```typescript
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { StorageModule } from '@vynelix/nestjs-storage';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    StorageModule.forRootAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        driver: configService.get('STORAGE_DRIVER'),
+        aws: {
+          region: configService.get('AWS_REGION'),
+          bucket: configService.get('AWS_BUCKET'),
+          accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
+          secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
+        },
+      }),
+      inject: [ConfigService],
+    }),
+  ],
+})
+export class AppModule {}
+```
+
+You can also use `useClass` or `useExisting` with a service implementing `StorageOptionsFactory`:
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { StorageOptionsFactory, StorageModuleOptions } from '@vynelix/nestjs-storage';
+
+@Injectable()
+export class StorageConfigService implements StorageOptionsFactory {
+  createStorageOptions(): StorageModuleOptions {
+    return {
+      driver: 'local',
+      local: {
+        path: '/custom/uploads/path',
+      },
+    };
+  }
+}
+
+// In your module:
+StorageModule.forRootAsync({
+  useClass: StorageConfigService,
+})
 ```
 
 ### Environment Variables
